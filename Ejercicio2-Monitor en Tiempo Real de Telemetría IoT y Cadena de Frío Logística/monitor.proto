@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// Servicio de monitoreo de la cadena de frío
+service MonitorCadenaFrio {
+  // Server streaming: el cliente manda una suscripción y el servidor responde con muchas lecturas
+  rpc TransmitirTelemetria (SuscripcionCamion) returns (stream LecturaSensor);
+}
+
+// Petición del cliente: qué camión quiere monitorear y cada cuántos segundos
+message SuscripcionCamion {
+  string id_camion = 1;
+  int32 intervalo_segundos = 2;
+}
+
+// Cada lectura que envía el servidor
+message LecturaSensor {
+  string id_camion = 1;
+  double temperatura_celsius = 2;
+  double latitud = 3;
+  double longitud = 4;
+  string timestamp = 5;
+  bool alerta_critica = 6;   // true si la temperatura sale del rango de 2 a 8 °C
+}
